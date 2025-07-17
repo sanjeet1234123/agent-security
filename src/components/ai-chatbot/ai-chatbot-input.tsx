@@ -165,7 +165,7 @@ const tokenizeText = (text: string): string[] => {
   return tokens;
 };
 
-export default function AIChatbotInput() {
+export default function AIChatbotInput({ onFirstMessage, inputRef }: { onFirstMessage?: () => void, inputRef?: any }) {
   const [text, setText] = useState<string>("");
   const [status, setStatus] = useState<
     "submitted" | "streaming" | "ready" | "error"
@@ -289,7 +289,9 @@ export default function AIChatbotInput() {
     if (!text.trim() || readyState !== ReadyState.OPEN) {
       return;
     }
-
+    if (onFirstMessage) {
+      onFirstMessage();
+    }
     addMessage(text, "user");
     const userMessage = text;
     setText("");
@@ -368,6 +370,7 @@ export default function AIChatbotInput() {
               ? "Type your message..."
               : "Connecting to chatbot..."
           }
+          ref={inputRef}
         />
         <AIInputToolbar>
           <AIInputTools>
